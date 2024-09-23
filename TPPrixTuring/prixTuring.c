@@ -72,7 +72,6 @@ Winner *creationWinner (FILE* f){
 	int tailleName=tailleChaine(&(buff[k]),';');
 	res->name = malloc((tailleName)*sizeof(char));
 	// strcpy
-	printf("taille Name =%d\n",tailleName);
 	for(int i=0;i<tailleName;i++)			
 	{		
 		res->name[i]=buff[k];
@@ -114,22 +113,26 @@ Winner** tabWinner(FILE* f)
 }
 
 void print1Winner(FILE*f,Winner* winner){
-	char buff[2048];
+	// char buff[5];
 
-	sprintf(buff,"%d",(*winner).year);
-	buff[4] = ';';
-	buff[5] = '\0';
+	// sprintf(buff,"%d",(*winner).year);
+	// buff[4] = ';';
+	// buff[5] = '\0';
 	// char* buff1=strcpy(&(buff[5]),(*winner).name);
 	// buff1[tailleChaine((*winner).name,'\0')]=';';
 	// strcpy(&buff1[1+tailleChaine((*winner).name,'\0')],(*winner).achievement);
 	
 	// printf("buff1 =%s\n",buff1);
-	printf("buffer du print1winnner =%s\n",buff);
+	// printf("buffer du print1winnner =%s\n",buff);
 
-	//fwrite(buff,sizeof(char),tailleChaine(buff,'\0'),f);
-	int nbSuccess=fwrite(winner->name,sizeof(char),strlen(winner->name),f);
-	fwrite(winner->achievement,sizeof(char),tailleChaine(winner->achievement,'\0'),f);
-	printf("nombre de caracteres ecris =%d\n",nbSuccess);
+	if (putc(winner->year,f)==EOF){
+		printf("erreur ecriture");
+	}
+
+	
+	//fwrite(winner->name,sizeof(char),strlen(winner->name),f);
+	//fwrite(winner->achievement,sizeof(char),tailleChaine(winner->achievement,'\0'),f);
+	//printf("nombre de caracteres ecris =%d\n",nbSuccess);
 
 }
 
@@ -163,7 +166,9 @@ int main(int argc, char** argv){
 	fOut = fopen(outputFilename, "w");
 
 	Winner *one = creationWinner(fIn);
-	print1Winner(fOut,one);
+	//print1Winner(fOut,one);
+	char test[]="test2";
+	fwrite(test,sizeof(char),strlen(test),fOut);
 	printf("error ? =%d",ferror(fOut));
 	
 	//Winner** winners = tabWinner(fIn);
