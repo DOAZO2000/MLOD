@@ -54,7 +54,6 @@ Winner *creationWinner (FILE* f){
 	
 	// read one line
 	fgets(buff,2047,f);
-
 	int k=0;					//compteur a travers mon buffer
 	while(buff[k]!=';')			//arret au premier point virgule.
 	{		
@@ -63,8 +62,6 @@ Winner *creationWinner (FILE* f){
 	buff[k] = '\0';
 	char* next;
 	res->year = strtol(buff,&next,10);
-
-	printf("year = %d\n",res->year);
 
 	k++;
 // ecriture de name
@@ -77,8 +74,7 @@ Winner *creationWinner (FILE* f){
 		res->name[i]=buff[k];
 		k++;
 	}
-	res->name[k]='\0';
-	printf("name = %s\n",res->name);
+	res->name[tailleName]='\0';
 
 	k++;
 
@@ -92,8 +88,7 @@ Winner *creationWinner (FILE* f){
 		res->achievement[i]=buff[k];
 		k++;
 	}
-	res->achievement[k]='\0';
-	printf("achievement = %s\n",res->achievement);
+	res->achievement[tailleAchievement]='\0';
 	
 	return res;
 }
@@ -113,32 +108,24 @@ Winner** tabWinner(FILE* f)
 }
 
 void print1Winner(FILE*f,Winner* winner){
-	// char buff[5];
+	char buff[6];
 
-	// sprintf(buff,"%d",(*winner).year);
-	// buff[4] = ';';
-	// buff[5] = '\0';
-	// char* buff1=strcpy(&(buff[5]),(*winner).name);
-	// buff1[tailleChaine((*winner).name,'\0')]=';';
-	// strcpy(&buff1[1+tailleChaine((*winner).name,'\0')],(*winner).achievement);
-	
-	// printf("buff1 =%s\n",buff1);
-	// printf("buffer du print1winnner =%s\n",buff);
+	sprintf(buff,"%d",winner->year);
+	buff[4] = ';';
+	buff[5] = '\0';
 
-	if (putc(winner->year,f)==EOF){
-		printf("erreur ecriture");
-	}
+	const char* write =buff;
+	char buff2[]={';'};
+	fwrite(write,sizeof(char),strlen(write),f);
+	fwrite(winner->name,sizeof(char),tailleChaine(winner->name,'\0'),f);
+	fwrite(buff2,sizeof(char),strlen(buff2),f);
+	fwrite(winner->achievement,sizeof(char),tailleChaine(winner->achievement,'\0'),f);
 
-	
-	//fwrite(winner->name,sizeof(char),strlen(winner->name),f);
-	//fwrite(winner->achievement,sizeof(char),tailleChaine(winner->achievement,'\0'),f);
-	//printf("nombre de caracteres ecris =%d\n",nbSuccess);
 
 }
 
 
-void printWinners(FILE* fIn, FILE* fOut, Winner** tab){
-	int numberWinners = numberOfWinners(fIn);
+void printWinners(int numberWinners, FILE* fOut, Winner** tab){
 
 	for (int i=0; i<numberWinners; i++){
 		print1Winner(fOut,tab[i]);
@@ -165,25 +152,13 @@ int main(int argc, char** argv){
 	fIn = fopen(filename, "r");
 	fOut = fopen(outputFilename, "w");
 
-	Winner *one = creationWinner(fIn);
-	//print1Winner(fOut,one);
-	char test[]="test2";
-	fwrite(test,sizeof(char),strlen(test),fOut);
-	printf("error ? =%d",ferror(fOut));
+	int nombreWinners = numberOfWinners(fIn);
+	Winner** winners = tabWinner(fIn);
+
+	printWinners(nombreWinners,fOut,winners);
+
+	fclose(fIn);
+
 	
-	//Winner** winners = tabWinner(fIn);
-	//rewind(f);
-	//printWinners(fIn,fOut,winners);
-
-	//evaluation des tests
-
-	// printf("------testEcriture2-----\n");
-
-	//printf("année =%d\n",testWinner.year);
-	//printf("nom(s)=%s\n",testWinner.name);
-	//printf("accomplissement(s)=%s\n",testWinner.achievement);d
-
-	// printf("-----------\n");
-
 	return EXIT_SUCCESS;
 }
