@@ -22,6 +22,13 @@ int main(void){
 	l = ajoutTete(1,l);
 
 	afficheListe_i(l);
+	afficheListe_r(l);
+	
+	//detruire_i(l);
+	// l=NULL;
+
+	ajoutFin_r(28,l);
+	afficheListe_i(l);
 
 	ajoutFin_r(99,l);
 	afficheListe_i(l);
@@ -52,7 +59,7 @@ int main(void){
 		afficheElement(p->val);
 		printf("\n");
 	}
-
+		return 0;
 	printf("retirePremier_i(1)   : ");
 	l = retirePremier_i(1,l);
 	afficheListe_r(l);
